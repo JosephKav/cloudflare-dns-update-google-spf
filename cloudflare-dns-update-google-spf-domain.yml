@@ -10,7 +10,7 @@
 
     - name: "{{ entry.record }}.{{ cf_zone }} - Register IPv4 DNS IP's"
       set_fact:
-        dig_ipv4_dns: '{{ dig_ipv4_dns + [ lookup("dig", item + "/A") ] }}'
+        dig_ipv4_dns: '{{ dig_ipv4_dns + [ lookup("community.general.dig", item + "/A") ] }}'
       loop: '{{ entry.ipv4 | default([]) }}'
       when: item is regex('(?i)[a-z]')
     - name: "{{ entry.record }}.{{ cf_zone }} - Register IPv4 IP's"
@@ -21,7 +21,7 @@
 
     - name: "{{ entry.record }}.{{ cf_zone }} - Register IPv6 DNS IP's"
       set_fact:
-        dig_ipv6_dns: '{{ dig_ipv6_dns + [ lookup("dig", item + "/AAAA") ] }}'
+        dig_ipv6_dns: '{{ dig_ipv6_dns + [ lookup("community.general.dig", item + "/AAAA") ] }}'
       loop: '{{ entry.ipv6 | default([]) }}'
       when: item is not regex(':')
     - name: "{{ entry.record }}.{{ cf_zone }} - Register IPv6 IP's"
@@ -37,7 +37,6 @@
     - name: '{{ entry.record }}.{{ cf_zone }} - Register IPv4 DNS entries in SPF TXT format'
       set_fact:
         spf_ipv4: '{{ spf_ipv4 | default("") }} ipv4:{{ " ipv4:".join(dig_ipv4_dns) }}'
-      loop: '{{ dig_ipv4_dns }}'
       when: dig_ipv4_dns | length > 0
 
     - name: '{{ entry.record }}.{{ cf_zone }} - Register IPv6 IP entries in SPF TXT format'
@@ -47,7 +46,6 @@
     - name: '{{ entry.record }}.{{ cf_zone }} - Register IPv6 DNS entries in SPF TXT format'
       set_fact:
         spf_ipv6: '{{ spf_ipv6 | default("") }} ipv6:{{ " ipv6:".join(dig_ipv6_dns) }}'
-      loop: '{{ dig_ipv6_dns }}'
       when: dig_ipv6_dns | length > 0
 
     - name: '{{ entry.record }}.{{ cf_zone }} - SPF TXT'

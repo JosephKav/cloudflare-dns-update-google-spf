@@ -12,7 +12,8 @@ Servers that I run can send internal emails to myself if I have their IP added t
   cf_api_token: 'https://dash.cloudflare.com/profile/api-tokens'
   # CloudFlare zone to create the records at
   cf_zone: 'example.com'
-  # List of the SPF records and the IP's/Domain's to resolve and add to the record. (Can contain IPv4 and/or IPv6 entries)
+  # List of the SPF records and the IP's/Domain's to resolve and add to the record.
+  # (Can contain IPv4 and/or IPv6 entries)
   spf:
     # Create the SPF for a.example.com with the IPv4 address of 'test.com' and '192.168.0.1'
     - record: a

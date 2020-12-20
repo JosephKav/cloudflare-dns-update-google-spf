@@ -16,13 +16,13 @@ Servers that I run can send internal emails to myself if I have their IP added t
   # (Can contain IPv4 and/or IPv6 entries)
   spf:
     # Create the SPF for a.example.com with the IPv4 address of 'test.com' and '192.168.0.1'
-    - record: a
+    - record: 'a'
       ipv4:
         - 'test.com'
         - '192.168.0.1'
     # Create the SPF for foo.bar.example.com with the IPv4 address of 'test.com' and '192.168.0.1'
     # and the IPv6 address of AAAA.to.resolve.com as well as 'aaaa:aaaa:aaaa:aaaa:aaaa:aaaa:aaaa:aaaa'
-    - record: foo.bar
+    - record: 'foo.bar'
       ipv4:
         - 'test.org'
         - '192.168.0.1'

@@ -32,20 +32,20 @@
 
     - name: '{{ entry.record }}.{{ cf_zone }} - Register IPv4 IP entries in SPF TXT format'
       set_fact:
-        spf_ipv4: ' ipv4:{{ " ipv4:".join(dig_ipv4_ip) }}'
+        spf_ipv4: ' ip4:{{ " ip4:".join(dig_ipv4_ip) }}'
       when: dig_ipv4_ip | length > 0
     - name: '{{ entry.record }}.{{ cf_zone }} - Register IPv4 DNS entries in SPF TXT format'
       set_fact:
-        spf_ipv4: '{{ spf_ipv4 | default("") }} ipv4:{{ " ipv4:".join(dig_ipv4_dns) }}'
+        spf_ipv4: '{{ spf_ipv4 | default("") }} ip4:{{ " ip4:".join(dig_ipv4_dns) }}'
       when: dig_ipv4_dns | length > 0
 
     - name: '{{ entry.record }}.{{ cf_zone }} - Register IPv6 IP entries in SPF TXT format'
       set_fact:
-        spf_ipv6: ' ipv6:{{ " ipv6:".join(dig_ipv6_ip) }}'
+        spf_ipv6: ' ip6:{{ " ip6:".join(dig_ipv6_ip) }}'
       when: dig_ipv6_ip | length > 0
     - name: '{{ entry.record }}.{{ cf_zone }} - Register IPv6 DNS entries in SPF TXT format'
       set_fact:
-        spf_ipv6: '{{ spf_ipv6 | default("") }} ipv6:{{ " ipv6:".join(dig_ipv6_dns) }}'
+        spf_ipv6: '{{ spf_ipv6 | default("") }} ip6:{{ " ip6:".join(dig_ipv6_dns) }}'
       when: dig_ipv6_dns | length > 0
 
     - name: '{{ entry.record }}.{{ cf_zone }} - SPF TXT'

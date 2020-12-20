@@ -1,5 +1,5 @@
 ---
-    - name: "{{ entry.record }}{{ cf_zone }} - Initialise/Reset the vars for IPv4 and IPv6 SPF entries"
+    - name: "{{ entry.record }}.{{ cf_zone }} - Initialise/Reset the vars for IPv4 and IPv6 SPF entries"
       set_fact:
         dig_ipv4_dns: []
         dig_ipv4_ip: []
@@ -8,53 +8,53 @@
         dig_ipv6_ip: []
         spf_ipv6: ""
 
-    - name: "{{ entry.record }}{{ cf_zone }} - Register IPv4 DNS IP's"
+    - name: "{{ entry.record }}.{{ cf_zone }} - Register IPv4 DNS IP's"
       set_fact:
         dig_ipv4_dns: '{{ dig_ipv4_dns + [ lookup("dig", item + "/A") ] }}'
       loop: '{{ entry.ipv4 | default([]) }}'
       when: item is regex('(?i)[a-z]')
-    - name: "{{ entry.record }}{{ cf_zone }} - Register IPv4 IP's"
+    - name: "{{ entry.record }}.{{ cf_zone }} - Register IPv4 IP's"
       set_fact:
         dig_ipv4_ip: "{{ dig_ipv4_ip + [ item ] }}"
       loop: '{{ entry.ipv4 | default([]) }}'
       when: item is not regex('(?i)[a-z]')
 
-    - name: "{{ entry.record }}{{ cf_zone }} - Register IPv6 DNS IP's"
+    - name: "{{ entry.record }}.{{ cf_zone }} - Register IPv6 DNS IP's"
       set_fact:
         dig_ipv6_dns: '{{ dig_ipv6_dns + [ lookup("dig", item + "/AAAA") ] }}'
       loop: '{{ entry.ipv6 | default([]) }}'
       when: item is not regex(':')
-    - name: "{{ entry.record }}{{ cf_zone }} - Register IPv6 IP's"
+    - name: "{{ entry.record }}.{{ cf_zone }} - Register IPv6 IP's"
       set_fact:
         dig_ipv6_ip: "{{ dig_ipv6_ip + [ item.item ] }}"
       loop: '{{ entry.ipv6 | default([]) }}'
       when: item is regex(':')
 
-    - name: '{{ entry.record }}{{ cf_zone }} - Register IPv4 IP entries in SPF TXT format'
+    - name: '{{ entry.record }}.{{ cf_zone }} - Register IPv4 IP entries in SPF TXT format'
       set_fact:
         spf_ipv4: ' ipv4:{{ " ipv4:".join(dig_ipv4_ip) }}'
       when: dig_ipv4_ip | length > 0
-    - name: '{{ entry.record }}{{ cf_zone }} - Register IPv4 DNS entries in SPF TXT format'
+    - name: '{{ entry.record }}.{{ cf_zone }} - Register IPv4 DNS entries in SPF TXT format'
       set_fact:
         spf_ipv4: '{{ spf_ipv4 | default("") }} ipv4:{{ " ipv4:".join(dig_ipv4_dns) }}'
       loop: '{{ dig_ipv4_dns }}'
       when: dig_ipv4_dns | length > 0
 
-    - name: '{{ entry.record }}{{ cf_zone }} - Register IPv6 IP entries in SPF TXT format'
+    - name: '{{ entry.record }}.{{ cf_zone }} - Register IPv6 IP entries in SPF TXT format'
       set_fact:
         spf_ipv6: ' ipv6:{{ " ipv6:".join(dig_ipv6_ip) }}'
       when: dig_ipv6_ip | length > 0
-    - name: '{{ entry.record }}{{ cf_zone }} - Register IPv6 DNS entries in SPF TXT format'
+    - name: '{{ entry.record }}.{{ cf_zone }} - Register IPv6 DNS entries in SPF TXT format'
       set_fact:
         spf_ipv6: '{{ spf_ipv6 | default("") }} ipv6:{{ " ipv6:".join(dig_ipv6_dns) }}'
       loop: '{{ dig_ipv6_dns }}'
       when: dig_ipv6_dns | length > 0
 
-    - name: '{{ entry.record }}{{ cf_zone }} - SPF TXT'
+    - name: '{{ entry.record }}.{{ cf_zone }} - SPF TXT'
       debug:
         msg: 'v=spf1{{ spf_ipv4 }}{{ spf_ipv6 }} include:_spf.google.com ~all'
 
-    - name: '{{ entry.record }}{{ cf_zone }} - Create the record using api token'
+    - name: '{{ entry.record }}.{{ cf_zone }} - Create the record using api token'
       cloudflare_dns:
         record: '{{ entry.record }}'
         zone: '{{ cf_zone }}'

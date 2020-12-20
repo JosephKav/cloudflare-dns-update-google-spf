@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  vars_files:
+    - 'vars.yml'
+  tasks:
+    - name: Create the cloudflare DNS TXT entries for SPF records from domains/IP\'s
+      include_tasks: 'cloudflare-dns-update-google-spf-domain.yml'
+      loop: "{{ spf }}"
+      loop_control:
+        label: '{{ entry.record}}.{{ cf_zone }}'
+        loop_var: entry
+...
